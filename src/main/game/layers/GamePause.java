@@ -49,7 +49,6 @@ public class GamePause extends Panel {
 		gr.add(options);
 		gr.add(quit);
 		p.add(gr);
-		this.setVisible(true);
 		// p.add();
 	}
 
@@ -64,7 +63,6 @@ public class GamePause extends Panel {
 	};
 
 	public void customRun() {
-		f.add(this);
 		p.setBackground(new Color(f.getBackground().getRed(), f.getBackground().getGreen(), f.getBackground().getBlue(), 123));
 		run();
 	}

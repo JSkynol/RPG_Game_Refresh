@@ -20,8 +20,7 @@ public class EntityBase {
 	private Point Location;
 	private Point pLoc = new Point(0, 0);
 	private int move = 1;
-//	private Graphics LayerGraphics = S.GameLayers.get(S.EntityLayer).getGraphics();
-	private Graphics graphics;
+	private Graphics LayerGraphics = S.GameLayers.get(S.EntityLayer).getGraphics();
 	private AIBase ai;
 	private StackTraceElement ex;
 	public static ArrayList<ArrayList<Object>> instances = new ArrayList<ArrayList<Object>>();
@@ -61,14 +60,28 @@ public class EntityBase {
 	 * @param Graphics
 	 */
 	public void setGraphics(Graphics g) {
-		graphics = g;
+		LayerGraphics = g;
 	}
+
 	/**
+	 * Sets the entity location
 	 * 
-	 * Returns Graphics of the entity
-	 * */
-	public Graphics getGraphics(){
-		return graphics;
+	 * @param xLocation
+	 * @param Ylocation
+	 */
+	private void setLocation(int x, int y) {
+		xLocation = x;
+		yLocation = y;
+	}
+
+	/**
+	 * Sets the entity location
+	 * 
+	 * @param Location
+	 */
+	private void setLocation(Point p) {
+		xLocation = (int) p.getX();
+		yLocation = (int) p.getY();
 	}
 
 	/**
@@ -165,11 +178,9 @@ public class EntityBase {
 			Point[] p = getLastAndCurr();
 			
 		if (getImage() == null) {
-			
 			g.clearRect(p[0].x - 1, p[0].y - 1, 18, 18);
 			g.draw3DRect(p[1].x, p[1].y, 16, 16, true);
 		} else {
-			
 			g.clearRect(p[0].x, p[0].y, getImage().getHeight(null), getImage().getWidth(null));
 			g.drawImage(getImage(), p[1].x,p[1].y, null);
 		}

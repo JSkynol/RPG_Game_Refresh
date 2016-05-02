@@ -185,11 +185,9 @@ public class MainGame implements Runnable {
 				return false;
 			}
 		});
-		try{
 		createPlayer();
 		createEntities();
 		createMap();
-		}catch(IOException e){}
 
 		System.out.println("All entity classes: " + EntityBase.instances.size());
 		for (int x = 0; x < EntityBase.instances.size(); x++) {
@@ -211,28 +209,24 @@ public class MainGame implements Runnable {
 		return false;
 	}
 
-	private void createPlayer() throws IOException{
+	private void createPlayer() {
 		player = new Player();
 		player.prevAndCurrent(null, new Point(100, 100));
-		
+		try {
 			playerSprite = ImageIO.read(new File("imgs/ruby.png"));
 			player.setImage(playerSprite);
-		
-		
+		} catch (IOException ex) {
+		}
 	}
 
-	private void createEntities() throws IOException{
+	private void createEntities() {
 		Mob evilOne = new Mob("Evil One");
 		evilOne.prevAndCurrent(null,new Point(200, 200));
-		BufferedImage tempSprite = ImageIO.read(new File("imgs/Robot.png"));
-		evilOne.setImage(tempSprite);
+		
 		evilOne.setAI(new MovementRandom(evilOne));
 		loadedEntities.add(evilOne);
 		evilOne.setMove(5);
-		Mob SecondaryEvil = new Mob("Secondary_Evil");
-		BufferedImage tempSprite2 = ImageIO.read(new File("imgs/flyingRobot.png"));
-		SecondaryEvil.setImage(tempSprite2);
-		SecondaryEvil.setAI(new MovementRandom(SecondaryEvil));
+		Mob SecondaryEvil = new Mob("Name");
 		SecondaryEvil.prevAndCurrent(null, new Point(100, 100));
 		loadedEntities.add(SecondaryEvil);
 

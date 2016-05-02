@@ -3,6 +3,13 @@ package main.entities;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.io.File;
+import java.io.IOException;
+
+import javax.swing.ImageIcon;
+
+import main.S;
+import main.entities.ai.AIBase;
 
 public class Entity extends EntityBase {
 	/**
