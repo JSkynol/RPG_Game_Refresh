@@ -2,6 +2,8 @@ package com.main.layers;
 
 import com.main.DataTypes.CPanel;
 
-public class OptionsMenu  extends CPanel{
-
+public class OptionsMenu extends CPanel {
+	public OptionsMenu(){
+		super();
+	}
 }

@@ -1,13 +1,12 @@
 package com.main.layers;
 
-import java.awt.Component;
+import java.awt.Color;
 import java.awt.KeyEventDispatcher;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
 
 import com.main.DataTypes.CPanel;
 import com.main.DataTypes.Event;
@@ -51,6 +50,11 @@ public class LayerAndInputHandler extends JLayeredPane implements
 		OptionsMenu = new OptionsMenu();
 		OptionsMenu.setName("OptionsMenu");
 		OptionsMenu.setInputHandler(this);
+		
+		for (int a = 0; a < getComponents().length; a++) {
+
+			getComponents()[a].setBackground(Color.gray);
+		}
 
 		add(Game);
 		add(GamePause);
@@ -69,9 +73,12 @@ public class LayerAndInputHandler extends JLayeredPane implements
 	public void update() {
 
 	}
-	/*public void moveToFront(Component c){
-		
-	}*/
+
+	/*
+	 * public void moveToFront(Component c){
+	 * 
+	 * }
+	 */
 
 	public CPanel Game() {
 		return Game;
@@ -121,20 +128,43 @@ public class LayerAndInputHandler extends JLayeredPane implements
 	private void actions() {
 		if (ke != null) {
 			System.out.println(" - Key:		 " + ke);
+			if(ke.getKeyCode()==27){
+				System.out.println("Pause");
+				setVis(GamePause);
+			}
 
 		}
 		if (ae != null) {
 			System.out.println(" - Action: 	 " + ae);
-			if (ae.getActionCommand().endsWith("Start")) {
+			if (ae.getActionCommand().contains("Start")) {
 				System.out.println("GameStart");
-				moveToFront(Game);
+				setVis(Game);
 				Game.CRun();
-				
+
+			}
+			if (ae.getActionCommand().contains("Options")) {
+				System.out.println("OptionsMenu");
+				moveToFront(OptionsMenu);
+				setVis(OptionsMenu);
+			}
+			if (ae.getActionCommand().contains("Quit")) {
+				System.out.println("MainMenu");
+				setVis(MainMenu);
 			}
 		}
+
 		for (int a = 0; a < getComponents().length; a++) {
-			System.out.println("List of Components " + getComponents()[a]);
+			System.out.println("List of Components	" + getComponents()[a]);
 		}
 
+	}
+
+	private void setVis(CPanel cp) {
+		for (int a = 0; a < this.getComponents().length; a++) {
+
+			getComponents()[a].setVisible(false);
+		}
+		cp.setVisible(true);
+		moveToFront(cp);
 	}
 }

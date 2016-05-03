@@ -43,9 +43,11 @@ public class InitialRun extends JFrame {
 		
 //		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000,500);
+		setBounds(0, 0, 1000,500);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		lc = new LayerAndInputHandler();
-		lc.setBorder(new EmptyBorder(5, 5, 5, 5));
+//		lc.setBorder(new EmptyBorder(5, 5, 5, 5));
 		lc.setLayout(new BorderLayout(0, 0));
 		setContentPane(lc);
 //		LayerHandler lc= new LayerHandler();
