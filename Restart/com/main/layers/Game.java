@@ -7,13 +7,14 @@ import com.main.DataTypes.CPanel;
 
 public class Game extends CPanel{
 	private JButton test;
+	GameTick gt;
 	public Game(LayerAndInputHandler in) {
 		super(in);
 		test = new JButton("name");
 		add(test);
 		setBounds(0,0,1000,500);
 		setVisible(true);
-		GameTick gt = new GameTick(this.getInputHandler());
+		gt = new GameTick(this.getInputHandler());
 		gt.setup();
 	}
 	@Override
@@ -21,5 +22,8 @@ public class Game extends CPanel{
 		setup();
 	}
 	private void setup(){
+	}
+	public GameTick getGameTick(){
+		return gt;
 	}
 }

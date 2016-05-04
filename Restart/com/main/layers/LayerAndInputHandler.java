@@ -5,6 +5,9 @@ import java.awt.KeyEventDispatcher;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JLayeredPane;
 
@@ -28,6 +31,9 @@ public class LayerAndInputHandler extends JLayeredPane implements
 	// private JLayeredPane Game;
 	private CPanel Game, GamePause, MainMenu, OptionsMenu;
 	private LayerAndInputHandler input;
+	private boolean keypress;
+	private KeyEvent key;
+	private int KeyCount;
 
 	// private InputHandler Input;
 
@@ -38,28 +44,27 @@ public class LayerAndInputHandler extends JLayeredPane implements
 
 		Game = new Game(this);
 		Game.setName("Game");
-		Game.setInputHandler(this);
-		GamePause = new GamePause();
+		GamePause = new GamePause(this);
 		GamePause.setName("GamePause");
-		GamePause.setInputHandler(this);
-		MainMenu = new MainMenu();
+		MainMenu = new MainMenu(this);
 		// MainMenu.crea
 		MainMenu.setName("MainMenu");
-		MainMenu.setInputHandler(input);
 		MainMenu.CRun();
-		OptionsMenu = new OptionsMenu();
+		OptionsMenu = new OptionsMenu(this);
 		OptionsMenu.setName("OptionsMenu");
-		OptionsMenu.setInputHandler(this);
-		
-		for (int a = 0; a < getComponents().length; a++) {
-
-			getComponents()[a].setBackground(Color.gray);
-		}
+//		OptionsMenu.setInputHandler(this);
 
 		add(Game);
 		add(GamePause);
 		add(OptionsMenu);
 		add(MainMenu);
+
+		for (int a = 0; a < getComponents().length; a++) {
+			getComponents()[a].setBackground(Color.gray);
+			getComponents()[a].setVisible(true);
+		}
+ 
+		setVis(MainMenu);
 	}
 
 	public void setHandler(LayerAndInputHandler in) {
@@ -127,35 +132,47 @@ public class LayerAndInputHandler extends JLayeredPane implements
 
 	private void actions() {
 		if (ke != null) {
-			System.out.println(" - Key:		 " + ke);
-			if(ke.getKeyCode()==27){
-				System.out.println("Pause");
+			boolean test = ke.getKeyCode() == ke.VK_A
+					|| ke.getKeyCode() == ke.VK_S || ke.getKeyCode() == ke.VK_D
+					|| ke.getKeyCode() == ke.VK_W;
+			if (test) {
+				if (ke.getID() == ke.KEY_RELEASED) {
+					KeyCount = 0;
+				}
+				if (ke.getID() == ke.KEY_TYPED || ke.getID() == ke.KEY_PRESSED) {
+					KeyCount++;
+				}
+				if (KeyCount == 10) {
+					KeyCount = 0;
+					//TODO moveplayer
+				}
+			}
+			// System.out.println(" - Key:		 " + ke);
+			if (ke.getKeyCode() == 27 && Game.isVisible()) {
 				setVis(GamePause);
 			}
 
 		}
 		if (ae != null) {
 			System.out.println(" - Action: 	 " + ae);
-			if (ae.getActionCommand().contains("Start")) {
-				System.out.println("GameStart");
+			if (ae.getActionCommand().contains("Start")||ae.getActionCommand().contains("Resume")) {
 				setVis(Game);
-				Game.CRun();
+//				Game.CRun();
 
 			}
 			if (ae.getActionCommand().contains("Options")) {
-				System.out.println("OptionsMenu");
 				moveToFront(OptionsMenu);
 				setVis(OptionsMenu);
 			}
-			if (ae.getActionCommand().contains("Quit")) {
-				System.out.println("MainMenu");
+			if (ae.getActionCommand().contains("ReturnToMainMenu")) {
 				setVis(MainMenu);
 			}
 		}
 
 		for (int a = 0; a < getComponents().length; a++) {
-			System.out.println("List of Components	" + getComponents()[a]);
+			// System.out.println("List of Components	" + getComponents()[a]);
 		}
+		ae=null;
 
 	}
 

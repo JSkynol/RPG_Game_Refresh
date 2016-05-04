@@ -13,10 +13,13 @@ public class GameTick {
 	public GameTick(LayerAndInputHandler in) {
 		Input = in;
 	}
-
+	
 	private void tickLoop() {
+		int tick=0;
 		while (gameRunning) {
-
+			if(tick==100){
+				tick=0;
+			}
 		}
 
 	}
@@ -28,15 +31,16 @@ public class GameTick {
 	public void setGameRunning(boolean f) {
 		gameRunning = f;
 	}
+
 	/** creates thread for game tick and adds keyboard manager to game */
 	public void setup() {
 		gameTickThread = new Thread() {
-	    public void run() {
-	       tickLoop();
-	    }  
-	};
+			public void run() {
+				tickLoop();
+			}
+		};
 
-	gameTickThread.start();
+		gameTickThread.start();
 		KeyboardFocusManager manager = KeyboardFocusManager
 				.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(Input);

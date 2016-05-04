@@ -20,10 +20,12 @@ public class MainMenu extends CPanel {
 //		IN = getInputHandler();	
 	}
 
-//	public MainMenu(LayerAndInputHandler in) {
-//		super(in);
-//		p = this;
-//	}
+	public MainMenu(LayerAndInputHandler in) {
+		super(in);
+		setInputHandler(in);
+		IN = getInputHandler();
+		p = this;
+	}
 
 	public void createMainMenu() {
 		buttonGroup = new Box(BoxLayout.PAGE_AXIS);
@@ -47,15 +49,6 @@ public class MainMenu extends CPanel {
 	public void CRun(){
 		createMainMenu();
 	}
-	public void setInputHandler(LayerAndInputHandler input) {
-		IN = input;
-		System.out.println("SetInput " + IN.toString()+ " "  + new Exception().getStackTrace()[1]);
-	}
-
-	public LayerAndInputHandler getInputHandler() {
-		System.out.println("GetInput: " + new Exception().getStackTrace()[0] + " " + IN.toString());
-		return IN;
-
-	}
+	
 
 }
