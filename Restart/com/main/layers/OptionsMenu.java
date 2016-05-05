@@ -8,7 +8,6 @@ public class OptionsMenu extends CPanel {
 	private JButton Quit;
 	public OptionsMenu(LayerAndInputHandler in){
 		super(in);
-		System.out.println("BG of GP: " + this.getBackground());
 		Quit = new JButton("Return to Menu");
 		Quit.setActionCommand("ReturnToMainMenu");
 		Quit.addActionListener(in);

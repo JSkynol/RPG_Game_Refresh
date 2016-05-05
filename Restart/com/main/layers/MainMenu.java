@@ -42,7 +42,6 @@ public class MainMenu extends CPanel {
 		buttonGroup.add(Box.createHorizontalStrut(500));
 		buttonGroup.add(Box.createVerticalBox());
 		buttonGroup.add(btn_Options);
-		System.out.println("MainMenu butons called "+ IN.toString());
 		add(buttonGroup);
 	}
 	@Override

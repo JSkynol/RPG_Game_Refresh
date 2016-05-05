@@ -1,21 +1,20 @@
 package com.main.layers;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.KeyEventDispatcher;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.JLayeredPane;
 
 import com.main.DataTypes.CPanel;
+import com.main.DataTypes.Direction;
 import com.main.DataTypes.Event;
+import com.main.entities.Player;
 
-public class LayerAndInputHandler extends JLayeredPane implements
-		ActionListener, KeyEventDispatcher {
+public class LayerAndInputHandler extends JLayeredPane implements ActionListener, KeyEventDispatcher {
 
 	/**
 	 * 
@@ -29,7 +28,10 @@ public class LayerAndInputHandler extends JLayeredPane implements
 	private String Name;
 	private byte ID;
 	// private JLayeredPane Game;
-	private CPanel Game, GamePause, MainMenu, OptionsMenu;
+	private Game Game;
+	private GamePause GamePause;
+	private MainMenu MainMenu;
+	private OptionsMenu OptionsMenu;
 	private LayerAndInputHandler input;
 	private boolean keypress;
 	private KeyEvent key;
@@ -52,9 +54,9 @@ public class LayerAndInputHandler extends JLayeredPane implements
 		MainMenu.CRun();
 		OptionsMenu = new OptionsMenu(this);
 		OptionsMenu.setName("OptionsMenu");
-//		OptionsMenu.setInputHandler(this);
+		// OptionsMenu.setInputHandler(this);
 
-		add(Game);
+		add(Game.getLayerPane());
 		add(GamePause);
 		add(OptionsMenu);
 		add(MainMenu);
@@ -63,7 +65,7 @@ public class LayerAndInputHandler extends JLayeredPane implements
 			getComponents()[a].setBackground(Color.gray);
 			getComponents()[a].setVisible(true);
 		}
- 
+
 		setVis(MainMenu);
 	}
 
@@ -85,8 +87,8 @@ public class LayerAndInputHandler extends JLayeredPane implements
 	 * }
 	 */
 
-	public CPanel Game() {
-		return Game;
+	public JLayeredPane Game() {
+		return Game.getLayerPane();
 	}
 
 	public CPanel GamePause() {
@@ -131,33 +133,56 @@ public class LayerAndInputHandler extends JLayeredPane implements
 	}
 
 	private void actions() {
+//		 System.out.println("Actions: "+ KeyCount + " " + ke + " " + ae);
 		if (ke != null) {
-			boolean test = ke.getKeyCode() == ke.VK_A
-					|| ke.getKeyCode() == ke.VK_S || ke.getKeyCode() == ke.VK_D
+			boolean test = ke.getKeyCode() == ke.VK_A || ke.getKeyCode() == ke.VK_S || ke.getKeyCode() == ke.VK_D
 					|| ke.getKeyCode() == ke.VK_W;
 			if (test) {
+
+				// if(ke.getID()==ke.KEY_PRESSED){
+				// KeyCount=24;
+				// }
+				// System.out.println("Test 2: " + ke.getID() + " 401");
+				if (ke.getID() == 401) {
+					// System.out.println("Typed" + KeyCount);
+					KeyCount++;
+					// if (KeyCount==5) {
+					// KeyCount = 0;
+					Direction d = new Direction(0, 0,Game.getGameTick().getPlayer().getEntityType().getSpeed());
+					if (ke.getKeyCode() == ke.VK_A) {
+						d.setXDir(-1);
+					}
+					if (ke.getKeyCode() == ke.VK_D) {
+						d.setXDir(1);
+					}
+					if (ke.getKeyCode() == ke.VK_S) {
+						d.setYDir(1);
+					}
+					if (ke.getKeyCode() == ke.VK_W) {
+						d.setYDir(-1);
+					}
+					Game.getGameTick().getPlayer().moveEntityCheck(d);
+					// TODO moveplayer
+					// }
+				}
 				if (ke.getID() == ke.KEY_RELEASED) {
 					KeyCount = 0;
 				}
-				if (ke.getID() == ke.KEY_TYPED || ke.getID() == ke.KEY_PRESSED) {
-					KeyCount++;
-				}
-				if (KeyCount == 10) {
-					KeyCount = 0;
-					//TODO moveplayer
-				}
+
 			}
 			// System.out.println(" - Key:		 " + ke);
-			if (ke.getKeyCode() == 27 && Game.isVisible()) {
+			if (ke.getKeyCode() == 27 && Game.isVisible()) {// Pause Game
 				setVis(GamePause);
+				Game.getGameTick().setGameRunning(false);
 			}
 
 		}
 		if (ae != null) {
-			System.out.println(" - Action: 	 " + ae);
-			if (ae.getActionCommand().contains("Start")||ae.getActionCommand().contains("Resume")) {
-				setVis(Game);
-//				Game.CRun();
+//			System.out.println("ae: "  + ae);
+			if (ae.getActionCommand().contains("Start") || ae.getActionCommand().contains("Resume")) {
+				setVis(Game.getLayerPane());
+				Game.getGameTick().setGameRunning(true);
+				// Game.CRun();
 
 			}
 			if (ae.getActionCommand().contains("Options")) {
@@ -166,17 +191,33 @@ public class LayerAndInputHandler extends JLayeredPane implements
 			}
 			if (ae.getActionCommand().contains("ReturnToMainMenu")) {
 				setVis(MainMenu);
+			
+			}
+			int error=0;
+			try {
+				if (ae.getActionCommand() == "Tick" && Game.getGameTick().isGameRunning()&&error!=1) {
+					Game.getGameTick().tickLoop();
+					Game.getLayerPane().moveToFront(Game.getPlayer());
+				}
+			} catch (Exception e) {
+				System.out.println("errored");
+				Game.getGameTick().setGameRunning(false);
+				e.printStackTrace();
+				error = 1;
+
 			}
 		}
+		
 
 		for (int a = 0; a < getComponents().length; a++) {
 			// System.out.println("List of Components	" + getComponents()[a]);
 		}
-		ae=null;
+		ae = null;
+		ke=null;
 
 	}
 
-	private void setVis(CPanel cp) {
+	private void setVis(Component cp) {
 		for (int a = 0; a < this.getComponents().length; a++) {
 
 			getComponents()[a].setVisible(false);
@@ -184,4 +225,7 @@ public class LayerAndInputHandler extends JLayeredPane implements
 		cp.setVisible(true);
 		moveToFront(cp);
 	}
+	
+	
+	
 }
