@@ -44,3 +44,23 @@ Tiredness
 	energy
 carry limit based on weight rather than inventory size
 	you have a chance to drop items if your carrying too much 
+	
+	
+different fighting style/types
+	- pokemon style
+	- iphone drag game style
+	- depending on what type of enemy/where/when ect
+	
+	
+to generate map
+	-1000/500 
+	- create  curciut with oil level of 10
+	- then set threshhold in color so it only has b/w
+	
+	check image px by px for white, then fill with random color
+	
+	
+to make world: 
+	- create each tile, turn it into a temporary image
+	- get world graphics to drawImage
+	
